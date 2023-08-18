@@ -1,0 +1,26 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "A demo application to practice implementation and explore nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kunaljainwin/InitialNodeProject.git"
+  },
+  "author": "Kunaljain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kunaljainwin/InitialNodeProject/issues"
+  },
+  "homepage": "https://github.com/kunaljainwin/InitialNodeProject#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "kafkajs": "^2.2.4",
+    "mysql2": "^3.6.0"
+  }
+}
