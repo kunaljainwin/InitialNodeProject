@@ -1,0 +1,4 @@
+{
+    "clientId": "app",
+    "brokers": ["localhost:9092"]
+  }

@@ -8,10 +8,10 @@ module.exports={
                     type:'object',
                     properties:
                     {
-                        key1: { type: "string" },
-                        key2: { type: "number" },
+                        name: { type: "string" },
+                        age: { type: "number" },
                     },
-                    required: ["key1","key2"]
+                    required: ["name","age"]
                 }
                 
             },
@@ -20,19 +20,17 @@ module.exports={
     bValidObject:{
         "message":
         {
-            "key1":"value1",
-            "key2":121
+            "name":"value1",
+            "age":18
         }
     },
         
     isJson:function(str){
-        try
-        {
-            console.log(typeof str)
-            JSON.parse(str)
+        try{
+            
+            JSON.parse(str)// throw error if not json
         }
-        catch(e)
-        {
+        catch(e){
             return false
         }
         return true
@@ -44,31 +42,24 @@ module.exports={
     validateSchemaLogic:(pJsonObject,pJsonSchema)=>{
         let result=true
         try{
-            if(!typeof pJsonObject==='object')
-            {
+            if(!typeof pJsonObject==='object'){
                 return false
             }
-            else
-            { 
-                if(pJsonSchema.hasOwnProperty("required"))
-                {
-                    for( let i=0;i< pJsonSchema.required.length;i++)
-                    {
+            else{ 
+                if(pJsonSchema.hasOwnProperty("required")){
+                    for( let i=0;i< pJsonSchema.required.length;i++){
                     // check for each key
                         let key=pJsonSchema.required[i];
                         let y=typeof pJsonObject[key]
                         let z=pJsonSchema.properties[key].type
-                        if(pJsonObject.hasOwnProperty(key)&&y===z)
-                        {
-                            if(y==='object')
-                            {
+                        if(pJsonObject.hasOwnProperty(key)&&y===z){
+                            if(y==='object'){
                                 let a=pJsonObject[key]
                                 let b=pJsonSchema.properties[key] 
                                 result=result && module.exports.validateSchemaLogic(a,b)
                             }               
                         }
-                        else
-                        {
+                        else{
                             return false
                         }
                     }
@@ -76,13 +67,10 @@ module.exports={
                 else{
                         return true
                     }
-        
-                
                     return result;
             }
         }
-        catch(e)
-        {
+        catch(e){
             return false
         }
     }

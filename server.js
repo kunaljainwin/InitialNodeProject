@@ -2,14 +2,11 @@ require('dotenv').config();
 const {  Kafka } = require('kafkajs')
 const express = require('express');
 const {Worker, workerData}=require('node:worker_threads');
-const validator=require('./Validations.js');
-
+const validator=require('./validations.js');
+const kafkaConfig=require('./src/Config/kafka_server.json')
 const app = express();
 
-const gKafka = new Kafka({
-  clientId: 'app', 
-  brokers: ['localhost:9092']
-});
+const gKafka = new Kafka(kafkaConfig);
 const gProducer = gKafka.producer(); 
 
 // main function 
@@ -37,30 +34,30 @@ app.use((err,req,res,next)=>{
 app.use((req,res,next)=>{
   console.log("This is a middleware for schema validation");
 
-  if(!validator.validateSchemaLogic(req.body,validator.bValidSchema))
-  {
+  if(!validator.validateSchemaLogic(req.body,validator.bValidSchema)){
        res.status(400).send("Invalid Schema")
   }
-  else
-  {
+  else{
       next()
-  }})
+  }
+})
   
 // producer api
-  app.post('/api/produce/:topic',async (req,res)=>
-  {
+app.post('/api/produce/:topic',async (req,res)=>{
+  let topic=req.params.topic
+  let message=req.body.message.key1
   await gProducer.send({
-      topic: req.params.topic,
-      messages:[{ value:req.body.message.key1}]
-  });
-  console.log(`sended topic : ${req.params.topic}, message :${req.body.message.key1}`);
+      topic: topic,
+      messages:[{ value:message}]
+  })
+  console.log(`sended topic : ${topic}, message :${message}`);
   res.status(200).send("Message sent");
-});
+})
 
 app.listen(process.env.PORT, [process.env.HOST], ()=>
 {
     console.log(`Server running at http://${process.env.HOST}:${process.env.PORT}/`);
-});
+})
 
 
-start().catch(console.error);
+start().catch(console.error)
